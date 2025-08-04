@@ -1,0 +1,107 @@
+// ===========================================================================================
+//  File Name: card-analytics.scss
+//  Description: Styles for analytics cards and charts
+//  Author: Cascade
+// ===========================================================================================
+
+// Analytics Card Styles
+.analytics-card {
+  .card-header {
+    position: relative;
+  }
+  
+  .card-title {
+    font-weight: 500;
+  }
+  
+  .card-body {
+    position: relative;
+  }
+}
+
+// Chart Styles
+.apexcharts-canvas {
+  .apexcharts-tooltip {
+    color: #333;
+    background: #fff;
+    border-radius: 5px;
+    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.1);
+    padding: 8px;
+    
+    .apexcharts-tooltip-title {
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+  }
+  
+  .apexcharts-xaxistooltip {
+    background: #fff;
+    border-color: #e9e9e9;
+  }
+}
+
+// Statistics Card
+.statistics-card {
+  .card-header {
+    padding-bottom: 0;
+  }
+  
+  .statistics-amount {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+  
+  .statistics-label {
+    color: #6c757d;
+    font-size: 0.9rem;
+  }
+  
+  .statistics-icon {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-size: 1.5rem;
+    opacity: 0.5;
+  }
+}
+
+// Country Statistics
+.country-statistics {
+  .country-name {
+    font-weight: 500;
+  }
+  
+  .country-count {
+    font-weight: 600;
+  }
+}
+
+// Visitor Table
+.visitor-table {
+  th {
+    font-weight: 500;
+  }
+  
+  .visitor-ip {
+    font-family: monospace;
+  }
+  
+  .visitor-location {
+    display: flex;
+    align-items: center;
+    
+    .flag-icon {
+      margin-right: 0.5rem;
+    }
+  }
+  
+  .visitor-browser {
+    display: flex;
+    align-items: center;
+    
+    .browser-icon {
+      margin-right: 0.5rem;
+    }
+  }
+}
