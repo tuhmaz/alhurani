@@ -95,37 +95,20 @@ class SecurityHeaders
      */
     protected function getEnhancedCSP(bool $isMonitoringPage = false): string
     {
-        $csp = [
-            "default-src" => ["'self'"],
-            "script-src" => [
-                "'self'",
-                "'unsafe-inline'",
-                "'unsafe-eval'",
-                "https:",
-                "http:",
-                "https://www.gstatic.com/recaptcha/",
-                "https://www.google.com/recaptcha/"
-            ],
-            "style-src" => ["'self'", "'unsafe-inline'", "https:", "http:"],
-            "img-src" => ["'self'", "data:", "https:", "http:", "blob:"],
-            "font-src" => ["'self'", "data:", "https:", "http:"],
-            "frame-src" => [
-                "'self'",
-                "https://www.google.com",
-                "https://www.google.com/recaptcha/",
-                "https://recaptcha.google.com"
-            ],
-            "connect-src" => ["'self'", "ws:", "wss:", "https:", "http:", "*"],
-            "media-src" => ["'self'"],
-            "object-src" => ["'none'"],
-            "base-uri" => ["'self'"],
-            "form-action" => ["'self'"],
-            "frame-ancestors" => ["'self'"],
-        ];
-    
+        // التحقق من تفعيل CSP
+        if (!Config::get('csp.enabled', true)) {
+            return '';
+        }
+
+        // الحصول على إعدادات CSP من ملف التكوين
+        $csp = Config::get('csp.directives', []);
+        
+        // تطبيق إعدادات خاصة لصفحات المراقبة
         if ($isMonitoringPage) {
-            $csp["img-src"][] = "*";
-            $csp["connect-src"][] = "*";
+            $monitoringOverrides = Config::get('csp.monitoring_overrides', []);
+            foreach ($monitoringOverrides as $directive => $values) {
+                $csp[$directive] = array_merge($csp[$directive] ?? [], $values);
+            }
         }
     
         return $this->buildCSPString($csp);

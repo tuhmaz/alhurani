@@ -27,50 +27,17 @@ class HttpsProtocol
         // تعيين رؤوس HTTP الأمنية
         $response = $next($request);
         
-        // تعيين رؤوس HTTP الأمنية لجميع الاستجابات
+        // تعيين رأس HTTPS فقط - باقي رؤوس الأمان ستتم معالجتها بواسطة SecurityHeaders middleware
         
-        // تعيين رأس Strict-Transport-Security
-        $hstsMaxAge = Config::get('secure-connections.hsts_max_age', 31536000);
-        $hstsIncludeSubdomains = Config::get('secure-connections.hsts_include_subdomains', true);
-        $hstsHeader = "max-age={$hstsMaxAge}";
-        if ($hstsIncludeSubdomains) {
-            $hstsHeader .= '; includeSubDomains';
-        }
-        $response->headers->set('Strict-Transport-Security', $hstsHeader);
-        
-        // تعيين رأس X-Content-Type-Options
-        if (Config::get('secure-connections.enable_content_type_options', true)) {
-            $response->headers->set('X-Content-Type-Options', 'nosniff');
-        }
-        
-        // تعيين رأس X-XSS-Protection
-        if (Config::get('secure-connections.enable_xss_protection', true)) {
-            $response->headers->set('X-XSS-Protection', '1; mode=block');
-        }
-        
-        // تعيين رأس X-Frame-Options
-        if (Config::get('secure-connections.enable_frame_options', true)) {
-            $response->headers->set('X-Frame-Options', 'SAMEORIGIN');
-        }
-        
-        // تعيين رأس Referrer-Policy
-        if (Config::get('secure-connections.enable_referrer_policy', true)) {
-            $referrerPolicy = Config::get('secure-connections.referrer_policy', 'strict-origin-when-cross-origin');
-            $response->headers->set('Referrer-Policy', $referrerPolicy);
-        }
-        
-        // تعيين رأس Content-Security-Policy
-        if (Config::get('secure-connections.enable_csp', true)) {
-            $cspDirectives = [];
-            $configDirectives = Config::get('secure-connections.csp_directives', []);
-            
-            foreach ($configDirectives as $directive => $sources) {
-                $cspDirectives[] = $directive . ' ' . implode(' ', $sources);
+        // تعيين رأس Strict-Transport-Security فقط في بيئة الإنتاج وعند استخدام HTTPS
+        if (App::environment('production') && $request->secure()) {
+            $hstsMaxAge = Config::get('secure-connections.hsts_max_age', 31536000);
+            $hstsIncludeSubdomains = Config::get('secure-connections.hsts_include_subdomains', true);
+            $hstsHeader = "max-age={$hstsMaxAge}";
+            if ($hstsIncludeSubdomains) {
+                $hstsHeader .= '; includeSubDomains; preload';
             }
-            
-            if (!empty($cspDirectives)) {
-                $response->headers->set('Content-Security-Policy', implode('; ', $cspDirectives));
-            }
+            $response->headers->set('Strict-Transport-Security', $hstsHeader);
         }
         
         return $response;

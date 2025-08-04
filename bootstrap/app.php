@@ -22,6 +22,7 @@ use App\Http\Middleware\AbsoluteSessionTimeout;
 use App\Http\Middleware\SecureFileUpload;
 use App\Http\Middleware\SecurityScanMiddleware;
 use App\Http\Middleware\RequestMonitorMiddleware;
+use App\Http\Middleware\HttpsProtocol;
 
 return Application::configure(basePath: dirname(__DIR__))
   ->withRouting(
@@ -41,12 +42,13 @@ return Application::configure(basePath: dirname(__DIR__))
     $middleware->web(AbsoluteSessionTimeout::class . ':240'); // مهلة مطلقة 4 ساعات
     
     // تطبيق middleware على مسارات الويب
+    $middleware->web(HttpsProtocol::class);
     $middleware->web(LocaleMiddleware::class);
+    $middleware->web(SecurityHeaders::class);
     $middleware->web(CompressResponse::class);
     $middleware->web(ImageOptimizer::class);
     $middleware->web(UpdateUserLastActivity::class);
     $middleware->web(PerformanceOptimizer::class);
-    $middleware->web(SecurityHeaders::class);
     $middleware->web(SwitchDatabase::class);
     $middleware->web(VisitorTrackingMiddleware::class);
     $middleware->web(SecurityScanMiddleware::class);

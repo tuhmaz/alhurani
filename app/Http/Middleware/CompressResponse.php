@@ -161,16 +161,8 @@ class CompressResponse
    */
   protected function addSecurityHeaders(Response $response): void
   {
-    $response->headers->set('X-Content-Type-Options', 'nosniff');
-    $response->headers->set('X-XSS-Protection', '1; mode=block');
-    $response->headers->set('X-Frame-Options', 'SAMEORIGIN');
-    $response->headers->set('Referrer-Policy', 'strict-origin-when-cross-origin');
-    
-    // إضافة Content-Security-Policy للحماية من هجمات XSS
-    if (!$response->headers->has('Content-Security-Policy')) {
-      $response->headers->set('Content-Security-Policy', "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:;");
-    }
-
+    // لا نضيف رؤوس الأمان هنا لأن SecurityHeaders middleware سيتولى ذلك
+    // نضيف فقط رؤوس HSTS إذا لزم الأمر
     if ($this->shouldEnableHSTS()) {
       $this->addHSTSHeader($response);
     }
