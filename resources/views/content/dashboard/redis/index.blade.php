@@ -131,9 +131,11 @@
             </div>
 
             <!-- تقسيم الصفحات -->
-            <div class="mt-3 d-flex justify-content-center">
-                {{ $logs->links() }}
-            </div>
+        
+        <div class="pagination pagination-outline-secondary">
+          {{ $logs->links('components.pagination.custom') }}
+        </div>
+    </div>
         </div>
     </div>
 </div>
