@@ -86,14 +86,19 @@ class FileController extends Controller
       $originalName = $file->getClientOriginalName();
       $safeFileName = Str::slug(pathinfo($originalName, PATHINFO_FILENAME)) . '.' . $file->getClientOriginalExtension();
 
-      // المسار داخل التخزين العام (public disk)
-      $storagePath = 'files/' . Str::slug($country) . '/' . Str::slug($class_name) . '/' . $request->file_category;
+      // تحديد المسار الصحيح للحفظ
+      $storagePath = public_path('storage/files/' . Str::slug($country) . '/' . Str::slug($class_name) . '/' . $request->file_category);
 
-      // حفظ الملف باستخدام التخزين القياسي للارافيل
-      $path = $file->storeAs($storagePath, $safeFileName, 'public');
+      // إنشاء المجلد إذا لم يكن موجوداً
+      if (!file_exists($storagePath)) {
+          mkdir($storagePath, 0777, true);
+      }
 
-      // المسار النسبي للعرض في الواجهة
-      $relativePath = 'storage/' . $path;
+      // حفظ الملف في المسار المحدد
+      $file->move($storagePath, $safeFileName);
+
+      // تخزين المسار النسبي في قاعدة البيانات
+      $relativePath = 'storage/files/' . Str::slug($country) . '/' . Str::slug($class_name) . '/' . $request->file_category . '/' . $safeFileName;
 
       $fileModel = File::on($connection)->create([
         'article_id' => $request->article_id,
