@@ -371,7 +371,7 @@ function insertFileAttachment(context, file, fileUrl, displayType, customText) {
        title="تحميل ${file.name} (${fileSize})"
        style="margin:2px;display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:7px 14px;background:linear-gradient(135deg, #155f65 0%, #22385a 100%);color:white;border-radius:18px;text-decoration:none;">
       <i class="${fileIcon}" style="font-size:20px;"></i>
-      <span>تحميل ${customText || file.name} (${file.name}) [${fileSize}]</span>
+      <span>تحميل ${customText || file.name}</span>
     </a>
   </p>
 `;

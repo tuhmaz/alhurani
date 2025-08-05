@@ -92,6 +92,12 @@ class CategoryController extends Controller
             $category->slug = Str::slug($validated['name']);
             $category->is_active = $request->boolean('is_active', true);
             $category->country = $validated['country'];
+            // رفع الصورة الرمزية إن وجدت
+            if ($request->hasFile('icon_image')) {
+                $file = $request->file('icon_image');
+                $path = $file->store('category_icons', 'public');
+                $category->icon_image = $path;
+            }
             $category->save();
 
             DB::connection($connection)->commit();

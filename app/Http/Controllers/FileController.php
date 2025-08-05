@@ -86,19 +86,14 @@ class FileController extends Controller
       $originalName = $file->getClientOriginalName();
       $safeFileName = Str::slug(pathinfo($originalName, PATHINFO_FILENAME)) . '.' . $file->getClientOriginalExtension();
 
-      // تحديد المسار الصحيح للحفظ
-      $storagePath = public_path('storage/files/' . Str::slug($country) . '/' . Str::slug($class_name) . '/' . $request->file_category);
+      // المسار داخل التخزين العام (public disk)
+      $storagePath = 'files/' . Str::slug($country) . '/' . Str::slug($class_name) . '/' . $request->file_category;
 
-      // إنشاء المجلد إذا لم يكن موجوداً
-      if (!file_exists($storagePath)) {
-          mkdir($storagePath, 0777, true);
-      }
+      // حفظ الملف باستخدام التخزين القياسي للارافيل
+      $path = $file->storeAs($storagePath, $safeFileName, 'public');
 
-      // حفظ الملف في المسار المحدد
-      $file->move($storagePath, $safeFileName);
-
-      // تخزين المسار النسبي في قاعدة البيانات
-      $relativePath = 'storage/files/' . Str::slug($country) . '/' . Str::slug($class_name) . '/' . $request->file_category . '/' . $safeFileName;
+      // المسار النسبي للعرض في الواجهة
+      $relativePath = 'storage/' . $path;
 
       $fileModel = File::on($connection)->create([
         'article_id' => $request->article_id,
@@ -238,7 +233,7 @@ class FileController extends Controller
       ]);
 
     } catch (\Exception $e) {
-      \Log::error('File update error: ' . $e->getMessage());
+      Log::error('File update error: ' . $e->getMessage());
 
       return response()->json([
         'success' => false,
@@ -344,7 +339,7 @@ class FileController extends Controller
       return response()->download($filePath, $file->file_Name);
 
     } catch (\Exception $e) {
-      \Log::error('File download error: ' . $e->getMessage());
+      Log::error('File download error: ' . $e->getMessage());
       return redirect()->back()->with('error', 'An error occurred while downloading the file.');
     }
   }
@@ -374,7 +369,7 @@ class FileController extends Controller
 
       return view('content.frontend.download.download-page', compact('file', 'pageTitle'));
     } catch (\Exception $e) {
-      \Log::error('Show download page error: ' . $e->getMessage());
+      Log::error('Show download page error: ' . $e->getMessage());
       abort(500, 'An error occurred while processing your request.');
     }
   }
@@ -404,7 +399,7 @@ class FileController extends Controller
 
       return response()->download($filePath, $file->file_Name);
     } catch (\Exception $e) {
-      \Log::error('Process download error: ' . $e->getMessage());
+      Log::error('Process download error: ' . $e->getMessage());
       abort(500, 'An error occurred while processing your download.');
     }
   }

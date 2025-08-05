@@ -20,10 +20,17 @@
           </div>
         @endif
 
-        <form action="{{ route('dashboard.categories.store') }}" method="POST">
+        <form action="{{ route('dashboard.categories.store') }}" method="POST" enctype="multipart/form-data">
           @csrf
           
           <div class="row g-3">
+            <div class="col-12">
+              <label class="form-label" for="icon_image">{{ __('Category Icon (Avatar)') }}</label>
+              <input type="file" class="form-control @error('icon_image') is-invalid @enderror" id="icon_image" name="icon_image" accept="image/*">
+              @error('icon_image')
+                <div class="invalid-feedback">{{ $message }}</div>
+              @enderror
+            </div>
             <div class="col-12">
               <label class="form-label" for="country">{{ __('Country') }} <span class="text-danger">*</span></label>
               <select class="form-select @error('country') is-invalid @enderror" 
