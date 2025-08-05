@@ -173,10 +173,11 @@
                             </tbody>
                         </table>
                     </div>
-
-                    <div class="mt-3">
-                        {{ $logs->appends(['filter' => $filter, 'search' => $search, 'per_page' => $perPage, 'sort_by' => $sortBy, 'sort_order' => $sortOrder])->links() }}
+                                
+                    <div class="pagination pagination-outline-secondary">
+                    {{ $logs->appends(['filter' => $filter, 'search' => $search, 'per_page' => $perPage, 'sort_by' => $sortBy, 'sort_order' => $sortOrder])->links('components.pagination.custom') }}
                     </div>
+                    
                 </div>
             </div>
         </div>

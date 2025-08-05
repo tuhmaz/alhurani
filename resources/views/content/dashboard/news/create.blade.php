@@ -6,6 +6,8 @@
 @vite([
   'resources/assets/vendor/libs/summernote/summernote.scss'
 ])
+<!-- FontAwesome للملفات -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 @endsection
 
 @section('vendor-script')
@@ -13,6 +15,7 @@
   'resources/assets/vendor/libs/summernote/summernote.js',
   'resources/assets/js/forms-editors.js'
 ])
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 @endsection
 
 @section('content')
@@ -207,42 +210,4 @@
     </div>
   </div>
 </div>
-
-@push('page-scripts')
-<script>
-$(document).ready(function() {
-  // تهيئة محرر النصوص
-  $('#summernote').summernote({
-    height: 300,
-    toolbar: [
-      ['style', ['style']],
-      ['font', ['bold', 'underline', 'clear']],
-      ['color', ['color']],
-      ['para', ['ul', 'ol', 'paragraph']],
-      ['table', ['table']],
-      ['insert', ['link', 'picture']],
-      ['view', ['fullscreen', 'codeview', 'help']]
-    ],
-    callbacks: {
-      onImageUpload: function(files) {
-        // يمكنك إضافة كود لرفع الصور هنا
-      }
-    }
-  });
-
-  // معاينة الصورة قبل الرفع
-  $('#image').change(function() {
-    const file = this.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        // يمكنك إضافة كود لعرض معاينة الصورة هنا
-      }
-      reader.readAsDataURL(file);
-    }
-  });
-});
-</script>
-@endpush
-
 @endsection

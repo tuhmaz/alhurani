@@ -135,7 +135,7 @@ class NewsController extends Controller
             $news->setConnection($connection);
             $news->title = $validated['title'];
             $news->slug = $slug;
-            $news->content = strip_tags($validated['content']);
+            $news->content = $validated['content'];
             $news->category_id = $validated['category_id'];
             $news->image = $imagePath;
             $news->meta_description = $validated['meta_description'] ?? Str::limit(strip_tags($validated['content']), 60);
@@ -231,7 +231,7 @@ class NewsController extends Controller
 
                 $news->title = $validated['title'];
                 $news->slug = Str::slug($validated['title']) . '-' . time();
-                $news->content = strip_tags($validated['content']);
+                $news->content = $validated['content'];
                 $news->category_id = $validated['category_id'];
                 $news->meta_description = $validated['meta_description'] ?? Str::limit(strip_tags($validated['content']), 60);
                 $news->keywords = $validated['keywords'] ?? implode(',', array_slice(explode(' ', $validated['title']), 0, 2));

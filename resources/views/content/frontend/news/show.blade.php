@@ -162,7 +162,7 @@ $keywordsArray = is_string($news->keywords) ? array_map('trim', explode(',', $ne
 @endphp
 
 <img src="{{ $imagePath }}" class="card-img-top img-fluid mb-4" alt="{{ $news->title }}">
-<h4 class="mb-4"> {!! $processedContent !!}</h4>
+<h4 class="mb-4">  {!! $news->content !!}</h4>
 
             <div class="news-details pt-12">
               <div class="row">
